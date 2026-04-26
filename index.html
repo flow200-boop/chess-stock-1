@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Chess</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css" integrity="sha384-q94+BZtLrkL1/ohOerZ316eO5C0l/8vQAq032v2zeOW6ztr82bHdvHlzE41S20K" crossorigin="anonymous">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Main Menu -->
+        <div id="main-menu" class="screen active">
+            <h1 class="title">Ultimate Chess</h1>
+            <p class="subtitle">Master the board. Challenge the world.</p>
+            <div class="menu-options">
+                <button class="menu-btn" onclick="navigateTo('play-bots')">
+                    <span class="icon">🤖</span> Play Bots
+                </button>
+                <button class="menu-btn" onclick="navigateTo('play-online')">
+                    <span class="icon">🌐</span> Play Online
+                </button>
+                <button class="menu-btn" onclick="navigateTo('solve-puzzles')">
+                    <span class="icon">🧩</span> Solve Puzzles
+                </button>
+                <button class="menu-btn" onclick="navigateTo('play-local')">
+                    <span class="icon">👥</span> Play Local
+                </button>
+            </div>
+        </div>
+
+        <!-- Play Bots Screen -->
+        <div id="play-bots" class="screen">
+            <button class="back-btn" onclick="navigateTo('main-menu')">← Back to Menu</button>
+            <h2>Play against Stockfish</h2>
+            <div class="difficulty-selector">
+                <label for="bot-difficulty">Difficulty:</label>
+                <select id="bot-difficulty">
+                    <option value="1">Beginner</option>
+                    <option value="5">Intermediate</option>
+                    <option value="10">Advanced</option>
+                    <option value="15">Expert</option>
+                    <option value="20">Grandmaster</option>
+                </select>
+                <button class="start-btn" onclick="startBotGame()">Start Game</button>
+            </div>
+            <div class="game-container hidden" id="bot-game-container">
+                <div id="bot-board" style="width: 400px"></div>
+                <div class="game-info">
+                    <div class="status" id="bot-status">White to move</div>
+                    <button class="action-btn" onclick="resetBotGame()">Resign</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Play Online Screen -->
+        <div id="play-online" class="screen">
+            <button class="back-btn" onclick="navigateTo('main-menu')">← Back to Menu</button>
+            <h2>Play Online</h2>
+            <div class="online-setup">
+                <p>Share this ID with your friend:</p>
+                <div class="id-container">
+                    <span id="my-peer-id">Generating...</span>
+                    <button onclick="copyPeerId()">Copy</button>
+                </div>
+                <div class="connect-container">
+                    <input type="text" id="friend-id" placeholder="Enter friend's ID">
+                    <button class="start-btn" onclick="connectToFriend()">Connect & Play</button>
+                </div>
+            </div>
+            <div class="game-container hidden" id="online-game-container">
+                <div id="online-board" style="width: 400px"></div>
+                <div class="game-info">
+                    <div class="status" id="online-status">Waiting for connection...</div>
+                    <button class="action-btn" onclick="resetOnlineGame()">Disconnect</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Solve Puzzles Screen -->
+        <div id="solve-puzzles" class="screen">
+            <button class="back-btn" onclick="navigateTo('main-menu')">← Back to Menu</button>
+            <h2>Solve Puzzles</h2>
+            <div class="puzzle-controls">
+                <button class="start-btn" onclick="loadNextPuzzle()">Load Puzzle</button>
+            </div>
+            <div class="game-container hidden" id="puzzle-game-container">
+                <div id="puzzle-board" style="width: 400px"></div>
+                <div class="game-info">
+                    <div class="status" id="puzzle-status">Find the best move</div>
+                    <button class="action-btn" onclick="loadNextPuzzle()">Skip Puzzle</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Play Local Screen -->
+        <div id="play-local" class="screen">
+            <button class="back-btn" onclick="navigateTo('main-menu')">← Back to Menu</button>
+            <h2>Play Locally</h2>
+            <div class="local-setup">
+                <button class="start-btn" onclick="startLocalGame()">Start Game</button>
+            </div>
+            <div class="game-container hidden" id="local-game-container">
+                <div id="local-board" style="width: 400px"></div>
+                <div class="game-info">
+                    <div class="status" id="local-status">White to move</div>
+                    <button class="action-btn" onclick="resetLocalGame()">Reset Game</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+    <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
