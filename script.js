@@ -85,6 +85,7 @@ function startLocalGame() {
     let config = {
         draggable: true,
         position: 'start',
+        pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
         onDragStart: onDragStart,
         onDrop: onDrop,
         onSnapEnd: onSnapEnd
@@ -100,7 +101,11 @@ function resetLocalGame() {
 }
 
 // --- Bot Play (Stockfish) ---
-let stockfish = new Worker('https://cdnjs.cloudflare.com/ajax/libs/stockfish.js/10.0.2/stockfish.js');
+// Load stockfish via Blob to avoid Cross-Origin Worker SecurityError
+let stockfishBlob = new Blob([
+    "importScripts('https://cdnjs.cloudflare.com/ajax/libs/stockfish.js/10.0.2/stockfish.js');"
+], { type: 'application/javascript' });
+let stockfish = new Worker(URL.createObjectURL(stockfishBlob));
 let botDifficulty = 5;
 
 stockfish.onmessage = function(event) {
@@ -126,6 +131,7 @@ function startBotGame() {
     let config = {
         draggable: true,
         position: 'start',
+        pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
         onDragStart: onDragStart,
         onDrop: onDrop,
         onSnapEnd: onSnapEnd
@@ -218,6 +224,7 @@ function startOnlineGame() {
     let config = {
         draggable: true,
         position: 'start',
+        pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
         orientation: playerColor === 'w' ? 'white' : 'black',
         onDragStart: onDragStart,
         onDrop: onDrop,
@@ -252,6 +259,7 @@ function loadNextPuzzle() {
     let config = {
         draggable: true,
         position: puzzle.fen,
+        pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
         onDragStart: onDragStart,
         onDrop: onDrop,
         onSnapEnd: onSnapEnd
