@@ -7,106 +7,140 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
+    
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-logo">
+            <span class="logo-icon">♞</span>
+            <span class="logo-text">Liquid Chess</span>
+        </div>
+        <div class="nav-links">
+            <a href="#" onclick="navigateTo('main-menu')">Home</a>
+            <a href="#">About</a>
+            <a href="#">Leaderboard</a>
+            <a href="#" class="nav-btn">Sign In</a>
+        </div>
+    </nav>
+
     <div id="app">
-        <!-- Main Menu -->
-        <div id="main-menu" class="screen active">
-            <h1 class="title">Ultimate Chess</h1>
-            <p class="subtitle">Master the board. Challenge the world.</p>
-            <div class="menu-options">
-                <button class="menu-btn" onclick="navigateTo('play-bots')">
-                    <span class="icon">🤖</span> Play Bots
-                </button>
-                <button class="menu-btn" onclick="navigateTo('play-online')">
-                    <span class="icon">🌐</span> Play Online
-                </button>
-                <button class="menu-btn" onclick="navigateTo('solve-puzzles')">
-                    <span class="icon">🧩</span> Solve Puzzles
-                </button>
-                <button class="menu-btn" onclick="navigateTo('play-local')">
-                    <span class="icon">👥</span> Play Local
-                </button>
+        <!-- Main Landing Page -->
+        <div id="main-menu" class="screen active landing-page">
+            <div class="hero-section">
+                <h1 class="title">The Next Move<br>Is Yours.</h1>
+                <p class="subtitle">Experience chess in a breathtaking liquid glass environment. Challenge friends globally or test your skills against our Grandmaster AI.</p>
+            </div>
+            
+            <div class="glass-panel main-panel">
+                <h3 class="panel-heading">Select Game Mode</h3>
+                <div class="menu-options">
+                    
+                    <button class="liquid-btn bot-btn" onclick="navigateTo('play-bots')">
+                        <div class="liquid-glare"></div>
+                        <span class="icon">🤖</span>
+                        <span class="btn-text">Play Bots</span>
+                    </button>
+                    
+                    <button class="liquid-btn online-btn" onclick="navigateTo('play-online')">
+                        <div class="liquid-glare"></div>
+                        <span class="icon">🌐</span>
+                        <span class="btn-text">Play Online</span>
+                    </button>
+                    
+                    <button class="liquid-btn puzzle-btn" onclick="navigateTo('solve-puzzles')">
+                        <div class="liquid-glare"></div>
+                        <span class="icon">🧩</span>
+                        <span class="btn-text">Puzzles</span>
+                    </button>
+                    
+                    <button class="liquid-btn local-btn" onclick="navigateTo('play-local')">
+                        <div class="liquid-glare"></div>
+                        <span class="icon">👥</span>
+                        <span class="btn-text">Local</span>
+                    </button>
+                    
+                </div>
             </div>
         </div>
 
         <!-- Play Bots Screen -->
-        <div id="play-bots" class="screen">
-            <button class="back-btn" onclick="navigateTo('main-menu')">← Back to Menu</button>
-            <h2>Play against Stockfish</h2>
+        <div id="play-bots" class="screen glass-panel game-screen">
+            <button class="back-btn pill-btn" onclick="navigateTo('main-menu')">← Back</button>
+            <h2>Vs Stockfish</h2>
             <div class="difficulty-selector">
-                <label for="bot-difficulty">Difficulty:</label>
-                <select id="bot-difficulty">
+                <label for="bot-difficulty" class="glass-label">Select Difficulty</label>
+                <select id="bot-difficulty" class="glass-input">
                     <option value="1">Beginner</option>
                     <option value="5">Intermediate</option>
                     <option value="10">Advanced</option>
                     <option value="15">Expert</option>
-                    <option value="20">Grandmaster</option>
+                    <option value="20" selected>Grandmaster</option>
                 </select>
-                <button class="start-btn" onclick="startBotGame()">Start Game</button>
+                <button class="start-btn pill-btn-primary" onclick="startBotGame()">Start Game</button>
             </div>
             <div class="game-container hidden" id="bot-game-container">
-                <div id="bot-board" style="width: 400px"></div>
-                <div class="game-info">
+                <div id="bot-board" class="board-wrapper"></div>
+                <div class="game-info glass-pill">
                     <div class="status" id="bot-status">White to move</div>
-                    <button class="action-btn" onclick="resetBotGame()">Resign</button>
+                    <button class="action-btn pill-btn" onclick="resetBotGame()">Resign</button>
                 </div>
             </div>
         </div>
 
         <!-- Play Online Screen -->
-        <div id="play-online" class="screen">
-            <button class="back-btn" onclick="navigateTo('main-menu')">← Back to Menu</button>
+        <div id="play-online" class="screen glass-panel game-screen">
+            <button class="back-btn pill-btn" onclick="navigateTo('main-menu')">← Back</button>
             <h2>Play Online</h2>
             <div class="online-setup">
-                <p>Share this ID with your friend:</p>
-                <div class="id-container">
+                <p class="glass-label">Share this ID with your friend:</p>
+                <div class="id-container glass-input-wrapper">
                     <span id="my-peer-id">Generating...</span>
-                    <button onclick="copyPeerId()">Copy</button>
+                    <button class="pill-btn-small" onclick="copyPeerId()">Copy</button>
                 </div>
                 <div class="connect-container">
-                    <input type="text" id="friend-id" placeholder="Enter friend's ID">
-                    <button class="start-btn" onclick="connectToFriend()">Connect & Play</button>
+                    <input type="text" id="friend-id" class="glass-input" placeholder="Enter friend's ID">
+                    <button class="start-btn pill-btn-primary" onclick="connectToFriend()">Connect</button>
                 </div>
             </div>
             <div class="game-container hidden" id="online-game-container">
-                <div id="online-board" style="width: 400px"></div>
-                <div class="game-info">
+                <div id="online-board" class="board-wrapper"></div>
+                <div class="game-info glass-pill">
                     <div class="status" id="online-status">Waiting for connection...</div>
-                    <button class="action-btn" onclick="resetOnlineGame()">Disconnect</button>
+                    <button class="action-btn pill-btn" onclick="resetOnlineGame()">Disconnect</button>
                 </div>
             </div>
         </div>
 
         <!-- Solve Puzzles Screen -->
-        <div id="solve-puzzles" class="screen">
-            <button class="back-btn" onclick="navigateTo('main-menu')">← Back to Menu</button>
+        <div id="solve-puzzles" class="screen glass-panel game-screen">
+            <button class="back-btn pill-btn" onclick="navigateTo('main-menu')">← Back</button>
             <h2>Solve Puzzles</h2>
             <div class="puzzle-controls">
-                <button class="start-btn" onclick="loadNextPuzzle()">Load Puzzle</button>
+                <button class="start-btn pill-btn-primary" onclick="loadNextPuzzle()">Load Puzzle</button>
             </div>
             <div class="game-container hidden" id="puzzle-game-container">
-                <div id="puzzle-board" style="width: 400px"></div>
-                <div class="game-info">
+                <div id="puzzle-board" class="board-wrapper"></div>
+                <div class="game-info glass-pill">
                     <div class="status" id="puzzle-status">Find the best move</div>
-                    <button class="action-btn" onclick="loadNextPuzzle()">Skip Puzzle</button>
+                    <button class="action-btn pill-btn" onclick="loadNextPuzzle()">Skip</button>
                 </div>
             </div>
         </div>
 
         <!-- Play Local Screen -->
-        <div id="play-local" class="screen">
-            <button class="back-btn" onclick="navigateTo('main-menu')">← Back to Menu</button>
-            <h2>Play Locally</h2>
+        <div id="play-local" class="screen glass-panel game-screen">
+            <button class="back-btn pill-btn" onclick="navigateTo('main-menu')">← Back</button>
+            <h2>Local Multiplayer</h2>
             <div class="local-setup">
-                <button class="start-btn" onclick="startLocalGame()">Start Game</button>
+                <button class="start-btn pill-btn-primary" onclick="startLocalGame()">Start Game</button>
             </div>
             <div class="game-container hidden" id="local-game-container">
-                <div id="local-board" style="width: 400px"></div>
-                <div class="game-info">
+                <div id="local-board" class="board-wrapper"></div>
+                <div class="game-info glass-pill">
                     <div class="status" id="local-status">White to move</div>
-                    <button class="action-btn" onclick="resetLocalGame()">Reset Game</button>
+                    <button class="action-btn pill-btn" onclick="resetLocalGame()">Reset</button>
                 </div>
             </div>
         </div>
