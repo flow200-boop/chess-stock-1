@@ -28,9 +28,15 @@ function onDragStart(source, piece, position, orientation) {
     if (botGameType === 'online') {
         if (playerColor !== game.turn()) return false;
     }
+    
+    selectedSquare = source;
+    highlightPossibleMoves(source);
 }
 
 function onDrop(source, target) {
+    selectedSquare = null;
+    removeHighlights();
+
     let move = game.move({
         from: source,
         to: target,
@@ -74,6 +80,75 @@ function updateStatus() {
     if(statusEl) statusEl.innerText = statusText;
 }
 
+let selectedSquare = null;
+
+function removeHighlights() {
+    $('.square-55d63').removeClass('highlight-selected possible-move');
+}
+
+function handleSquareClick(square) {
+    if (game.game_over()) return;
+    
+    if (botGameType === 'online' && playerColor !== game.turn()) return;
+
+    if (selectedSquare) {
+        let move = game.move({
+            from: selectedSquare,
+            to: square,
+            promotion: 'q'
+        });
+        
+        if (move === null) {
+            let piece = game.get(square);
+            if (piece && piece.color === game.turn()) {
+                selectedSquare = square;
+                highlightPossibleMoves(square);
+            } else {
+                selectedSquare = null;
+                removeHighlights();
+            }
+        } else {
+            selectedSquare = null;
+            removeHighlights();
+            board.position(game.fen());
+            updateStatus();
+            
+            if (botGameType === 'bot') {
+                window.setTimeout(makeBotMove, 250);
+            } else if (botGameType === 'online') {
+                sendMove(move.from, move.to);
+            } else if (botGameType === 'puzzle') {
+                checkPuzzleMove(move.from, move.to);
+            }
+        }
+    } else {
+        let piece = game.get(square);
+        if (piece && piece.color === game.turn()) {
+            selectedSquare = square;
+            highlightPossibleMoves(square);
+        }
+    }
+}
+
+function highlightPossibleMoves(square) {
+    removeHighlights();
+    $('.square-' + square).addClass('highlight-selected');
+    
+    let moves = game.moves({
+        square: square,
+        verbose: true
+    });
+    
+    for (let i = 0; i < moves.length; i++) {
+        $('.square-' + moves[i].to).addClass('possible-move');
+    }
+}
+
+$(document).on('click', '.square-55d63', function() {
+    let square = $(this).attr('data-square');
+    handleSquareClick(square);
+});
+
 // --- Local Play ---
 function startLocalGame() {
     document.querySelector('.local-setup').classList.add('hidden');
@@ -84,6 +159,9 @@ function startLocalGame() {
     
     let config = {
         draggable: true,
+        moveSpeed: 300,
+        snapbackSpeed: 400,
+        snapSpeed: 150,
         position: 'start',
         pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
         onDragStart: onDragStart,
@@ -130,6 +208,9 @@ function startBotGame() {
     
     let config = {
         draggable: true,
+        moveSpeed: 300,
+        snapbackSpeed: 400,
+        snapSpeed: 150,
         position: 'start',
         pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
         onDragStart: onDragStart,
@@ -223,6 +304,9 @@ function startOnlineGame() {
     
     let config = {
         draggable: true,
+        moveSpeed: 300,
+        snapbackSpeed: 400,
+        snapSpeed: 150,
         position: 'start',
         pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
         orientation: playerColor === 'w' ? 'white' : 'black',
@@ -258,6 +342,9 @@ function loadNextPuzzle() {
     
     let config = {
         draggable: true,
+        moveSpeed: 300,
+        snapbackSpeed: 400,
+        snapSpeed: 150,
         position: puzzle.fen,
         pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
         onDragStart: onDragStart,
